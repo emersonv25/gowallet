@@ -9,5 +9,5 @@ func Initialize() {
 
 	initializeRoutes(router)
 
-	router.Run(":3333")
+	router.Run(":9000")
 }
