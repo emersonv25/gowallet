@@ -44,3 +44,6 @@ Thumbs.db
 # Debug files
 debug
 __debug_bin
+
+# DbFolder
+db/
