@@ -6,29 +6,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetClientHandler(ctx *gin.Context) {
+func GetWallet(ctx *gin.Context) {
 	// Implementation for creating a client
 	ctx.JSON(http.StatusOK, gin.H{
-		"status": "GET Client",
+		"status": "GET Wallet",
 	})
 }
 
-func CreateClientHandler(ctx *gin.Context) {
+func CreateWalletHandler(ctx *gin.Context) {
 	// Implementation for creating a client
 	ctx.JSON(http.StatusOK, gin.H{
-		"status": "Client Created",
+		"status": "Wallet Created",
 	})
 }
-func UpdateClientHandler(ctx *gin.Context) {
+func UpdateWalletHandler(ctx *gin.Context) {
 	// Implementation for updating a client
 	ctx.JSON(http.StatusOK, gin.H{
-		"status": "Client Updated",
+		"status": "Wallet Updated",
 	})
 }
 
-func DeleteClientHandler(ctx *gin.Context) {
+func DeleteWalletHandler(ctx *gin.Context) {
 	// Implementation for deleting a client
 	ctx.JSON(http.StatusOK, gin.H{
-		"status": "Client Deleted",
+		"status": "Wallet Deleted",
 	})
 }
