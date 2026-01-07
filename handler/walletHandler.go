@@ -8,10 +8,21 @@ import (
 )
 
 func GetWallet(ctx *gin.Context) {
-	// Implementation for creating a client
-	ctx.JSON(http.StatusOK, gin.H{
-		"status": "GET Wallet",
-	})
+	id := ctx.Query("id")
+	if id == "" {
+		sendError(ctx, http.StatusBadRequest, errParamIsRequired("id", "queryParameter").Error())
+		return
+	}
+
+	wallet := schemas.Wallet{}
+	if err := db.First(&wallet, id).Error; err != nil {
+		sendError(ctx, http.StatusNotFound, "Wallet not founds")
+		return
+	}
+
+	response := schemas.NewWalletResponse(wallet)
+
+	sendSuccess(ctx, response)
 }
 
 func CreateWalletHandler(ctx *gin.Context) {
@@ -45,8 +56,22 @@ func UpdateWalletHandler(ctx *gin.Context) {
 }
 
 func DeleteWalletHandler(ctx *gin.Context) {
-	// Implementation for deleting a client
-	ctx.JSON(http.StatusOK, gin.H{
-		"status": "Wallet Deleted",
-	})
+	id := ctx.Query("id")
+
+	if id == "" {
+		sendError(ctx, http.StatusBadRequest, errParamIsRequired("id", "queryParameter").Error())
+		return
+	}
+
+	wallet := schemas.Wallet{}
+	if err := db.First(&wallet, id).Error; err != nil {
+		sendError(ctx, http.StatusNotFound, "Wallet not found")
+		return
+	}
+
+	if err := db.Delete(&wallet).Error; err != nil {
+		sendError(ctx, http.StatusInternalServerError, "Failed to delete wallet")
+		return
+	}
+	sendSuccess(ctx, nil)
 }
