@@ -14,9 +14,10 @@ type Transaction struct {
 
 type TransactionResponse struct {
 	ID        uint    `json:"id"`
-	CreatedAt string  `json:"created_at"`
-	UpdatedAt string  `json:"updated_at"`
-	WalletId  uint    `json:"wallet_id"`
+	CreatedAt string  `json:"createdAt"`
+	UpdatedAt string  `json:"updatedAt"`
+	DeletedAt string  `json:"deletedAt,omitempty"`
+	WalletId  uint    `json:"walletId"`
 	Amount    float64 `json:"amount"`
 	Type      string  `json:"type"`
 }
