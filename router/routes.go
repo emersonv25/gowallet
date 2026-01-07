@@ -15,5 +15,6 @@ func initializeRoutes(router *gin.Engine) {
 		v1.DELETE("/wallet", func(ctx *gin.Context) { handler.DeleteWalletHandler(ctx) })
 
 		v1.GET("/transaction", func(ctx *gin.Context) { handler.GetTransactions(ctx) })
+		v1.POST("/transaction", func(ctx *gin.Context) { handler.CreateTransaction(ctx) })
 	}
 }
