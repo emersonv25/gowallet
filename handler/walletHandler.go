@@ -26,7 +26,7 @@ func GetWallet(ctx *gin.Context) {
 }
 
 func CreateWalletHandler(ctx *gin.Context) {
-	request := CreateWalletRequest{}
+	request := WalletRequest{}
 	ctx.BindJSON(&request)
 	if err := request.Validate(); err != nil {
 		sendError(ctx, http.StatusBadRequest, err.Error())
@@ -49,10 +49,32 @@ func CreateWalletHandler(ctx *gin.Context) {
 	sendSuccess(ctx, response)
 }
 func UpdateWalletHandler(ctx *gin.Context) {
-	// Implementation for updating a client
-	ctx.JSON(http.StatusOK, gin.H{
-		"status": "Wallet Updated",
-	})
+	id := ctx.Query("id")
+	if id == "" {
+		sendError(ctx, http.StatusBadRequest, errParamIsRequired("id", "queryParameter").Error())
+		return
+	}
+	request := WalletRequest{}
+	ctx.BindJSON(&request)
+	if err := request.Validate(); err != nil {
+		sendError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+	wallet := schemas.Wallet{}
+	if err := db.First(&wallet, id).Error; err != nil {
+		sendError(ctx, http.StatusNotFound, "Wallet not found")
+		return
+	}
+
+	wallet.Name = request.Name
+	wallet.Document = request.Document
+	wallet.Email = request.Email
+	if err := db.Save(&wallet).Error; err != nil {
+		sendError(ctx, http.StatusInternalServerError, "Failed to update wallet")
+		return
+	}
+	response := schemas.NewWalletResponse(wallet)
+	sendSuccess(ctx, response)
 }
 
 func DeleteWalletHandler(ctx *gin.Context) {
