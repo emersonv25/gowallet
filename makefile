@@ -2,12 +2,8 @@
 # Variables
 APP_NAME=gowallet
 
-# Tasks
-default: run-with-docs
 
 run:
-	@go run main.go
-run-with-docs:
 	@swag init
 	@go run main.go
 build:

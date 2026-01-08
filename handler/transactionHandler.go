@@ -7,6 +7,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Get Transactions
+// @Description Get all transactions for a wallet
+// @Tags Transaction
+// @Accept json
+// @Produce json
+// @Param walletId query string true "Wallet ID"
+// @Success 200 {object} ListTransactionsResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /transaction [get]
 func GetTransactions(ctx *gin.Context) {
 	walletId := ctx.Query("walletId")
 	if walletId == "" {
@@ -26,6 +36,17 @@ func GetTransactions(ctx *gin.Context) {
 	sendSuccess(ctx, response)
 }
 
+// @Summary Create Transaction
+// @Description Create a new transaction (credit or debit)
+// @Tags Transaction
+// @Accept json
+// @Produce json
+// @Param request body CreateTransactionRequest true "Transaction data"
+// @Success 200 {object} CreateTransactionResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /transaction [post]
 func CreateTransaction(ctx *gin.Context) {
 	var req CreateTransactionRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {

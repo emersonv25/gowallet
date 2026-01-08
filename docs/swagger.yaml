@@ -1,4 +1,249 @@
+definitions:
+  handler.CreateTransactionRequest:
+    properties:
+      amount:
+        type: number
+      description:
+        type: string
+      type:
+        $ref: '#/definitions/schemas.TransactionType'
+      walletId:
+        type: integer
+    type: object
+  handler.CreateTransactionResponse:
+    properties:
+      data:
+        $ref: '#/definitions/schemas.TransactionResponse'
+    type: object
+  handler.CreateWalletResponse:
+    properties:
+      data:
+        $ref: '#/definitions/schemas.WalletResponse'
+    type: object
+  handler.ErrorResponse:
+    properties:
+      message:
+        type: string
+      statusCode:
+        type: integer
+    type: object
+  handler.ListTransactionsResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/schemas.TransactionResponse'
+        type: array
+    type: object
+  handler.SuccessResponse:
+    properties:
+      data: {}
+    type: object
+  handler.WalletRequest:
+    properties:
+      document:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+    type: object
+  schemas.TransactionResponse:
+    properties:
+      amount:
+        type: number
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      type:
+        $ref: '#/definitions/schemas.TransactionType'
+      updatedAt:
+        type: string
+      walletId:
+        type: integer
+    type: object
+  schemas.TransactionType:
+    enum:
+    - credit
+    - debit
+    type: string
+    x-enum-varnames:
+    - TransactionTypeCredit
+    - TransactionTypeDebit
+  schemas.WalletResponse:
+    properties:
+      balance:
+        type: number
+      createdAt:
+        type: string
+      document:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /transaction:
+    get:
+      consumes:
+      - application/json
+      description: Get all transactions for a wallet
+      parameters:
+      - description: Wallet ID
+        in: query
+        name: walletId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.ListTransactionsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get Transactions
+      tags:
+      - Transaction
+    post:
+      consumes:
+      - application/json
+      description: Create a new transaction (credit or debit)
+      parameters:
+      - description: Transaction data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.CreateTransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.CreateTransactionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Create Transaction
+      tags:
+      - Transaction
+  /wallet:
+    delete:
+      consumes:
+      - application/json
+      description: Delete wallet by ID
+      parameters:
+      - description: Wallet ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Delete Wallet
+      tags:
+      - Wallet
+    get:
+      consumes:
+      - application/json
+      description: Get wallet by ID
+      parameters:
+      - description: Wallet ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.CreateWalletResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get Wallet
+      tags:
+      - Wallet
+    post:
+      consumes:
+      - application/json
+      description: Create a new wallet
+      parameters:
+      - description: Wallet data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.WalletRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.CreateWalletResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Create Wallet
+      tags:
+      - Wallet
 swagger: "2.0"

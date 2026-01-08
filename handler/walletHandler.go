@@ -7,6 +7,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @BasePath /api/v1/wallet
+// @Summary Get Wallet
+// @Description Get wallet by ID
+// @Tags Wallet
+// @Accept json
+// @Produce json
+// @Param id query string true "Wallet ID"
+// @Success 200 {object} CreateWalletResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Router /wallet [get]
 func GetWallet(ctx *gin.Context) {
 	id := ctx.Query("id")
 	if id == "" {
@@ -25,6 +36,16 @@ func GetWallet(ctx *gin.Context) {
 	sendSuccess(ctx, response)
 }
 
+// @Summary Create Wallet
+// @Description Create a new wallet
+// @Tags Wallet
+// @Accept json
+// @Produce json
+// @Param request body WalletRequest true "Wallet data"
+// @Success 200 {object} CreateWalletResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /wallet [post]
 func CreateWalletHandler(ctx *gin.Context) {
 	request := WalletRequest{}
 	ctx.BindJSON(&request)
@@ -77,6 +98,17 @@ func UpdateWalletHandler(ctx *gin.Context) {
 	sendSuccess(ctx, response)
 }
 
+// @Summary Delete Wallet
+// @Description Delete wallet by ID
+// @Tags Wallet
+// @Accept json
+// @Produce json
+// @Param id query string true "Wallet ID"
+// @Success 200 {object} SuccessResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /wallet [delete]
 func DeleteWalletHandler(ctx *gin.Context) {
 	id := ctx.Query("id")
 
